@@ -13,6 +13,11 @@ td {
   padding: 0;
 }
 
+* {
+  box-sizing: border-box;
+}
+
+/* Estilos gerais */
 
 body {
   font-family: 'Arial', sans-serif;
@@ -22,24 +27,33 @@ body {
 
 main {
   display: flex;
-  justify-content: center;
-  flex-direction: column;
-  margin: 0 auto;
-  max-width: 80vw;
-}
-
-main > section, main > article {
-  display: flex;
   flex-direction: column;
   align-items: center;
+}
+
+div {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    flex-wrap:wrap;
+}
+
+main > section {
+  padding: 20px;
+}
+
+main section,
+main article {
+  width: 80vw;
   color: black;
   background-color: #fff;
   padding: 20px;
   border-radius: 5px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   margin-bottom: 20px;
+  
+  flex-direction: column;
 }
-
 
 section h1,
 section h2,
@@ -61,6 +75,7 @@ ul li {
   list-style-position: inside;
 }
 
+/* Header */
 
 header {
   background-color: #007bff;
@@ -68,26 +83,23 @@ header {
   padding: 20px;
   display: flex;
   justify-content: center;
-  flex-wrap: wrap;
 }
 
 header h1 {
   font-size: 24px;
-
 }
 
+/* Lista de navegação */
 
 nav ul {
   list-style: none;
+  display: flex;
   gap: 20px;
+  justify-content: center;
+  flex-wrap: wrap;
   background-color: #343a40;
   padding: 10px;
   margin-bottom: 20px;
-  display: flex;
-  justify-content: center;
-  flex-direction: row;
-  flex-wrap: wrap;
-
 }
 
 nav a {
@@ -100,6 +112,17 @@ nav a:hover {
   color: #ffc107;
 }
 
+/* Seções */
+
+#info-squirtle img {
+  width: 150px;
+  height: 150px;
+}
+
+img#foto2 {
+    padding: 30px;
+    margin: 2px;
+}
 
 #curiosidades li::marker {
   content: '🔍';
@@ -108,25 +131,27 @@ nav a:hover {
 #evolucao ul {
   display: flex;
   justify-content: space-around;
-  list-style: none;
   flex-wrap: wrap;
+  list-style: none;
+}
+
+#evolucao img {
+  height: 150px;
 }
 
 #evolucao figcaption {
   font-weight: 600;
   font-size: 20px;
   text-align: center;
-  margin-top: 16px; 
+  margin-top: 16px;
 }
-
-
 
 article {
   background-color: #ffc107;
   color: #fff;
-
 }
 
+/* Links */
 
 a[target='_blank'] {
   color: #4592c4;
@@ -137,7 +162,7 @@ a[target='_blank']:hover {
   opacity: 0.8;
 }
 
-
+/* Footer */
 
 footer {
   background-color: #343a40;
