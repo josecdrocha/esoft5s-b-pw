@@ -128,6 +128,12 @@ img#foto2 {
   content: '🔍';
 }
 
+#curiosidades ul {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
 #evolucao ul {
   display: flex;
   justify-content: space-around;
@@ -168,8 +174,13 @@ footer {
   background-color: #343a40;
   color: #fff;
   padding: 20px;
-  text-align: center;
-  bottom: 0;
+  display: flex;
+  justify-content: center; 
+  gap: 12px; 
+}
+
+footer p {
+  margin-bottom: 0; 
 }
 
 footer a {
