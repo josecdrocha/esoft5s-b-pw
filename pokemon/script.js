@@ -1,23 +1,27 @@
-const urlParams = new URLSearchParams(window.location.search);
-const pokemonName = urlParams.get('evolution');
-
-
-document.title = `Detalhes do Pokémon ${pokemonName.toUpperCase()}`;
-
 (async () => {
+  const urlParams = new URLSearchParams(window.location.search);
+  const pokemonName = urlParams.get('evolution');
+
+  document.title += ` ${pokemonName.toUpperCase()}`;
+
   const response = await fetch(
     `https://pokeapi.co/api/v2/pokemon/${pokemonName}`
   ).then(response => response.json());
 
-  const pokemonInfoDiv = document.querySelector('#informacoes');
+  const sprites = Object.values(response.sprites).filter(
+    el => typeof el == 'string'
+  );
 
-  const pokemonHeader = document.createElement('h2');
-  pokemonHeader.textContent = `Informações sobre o ${pokemonName}`;
+  let x = 0;
 
-  pokemonInfoDiv.appendChild(pokemonHeader);
+  document.getElementById('pokemon-img').addEventListener('click', () => {
+    x < sprites.length - 1 ? x++ : (x = 0);
+    document.querySelector('#pokemon-img').src = sprites[x];
+  });
 
-  const pokemonImage = document.createElement('img');
-  pokemonImage.src = response.sprites.front_default;
+  document.querySelector(
+    '#informacoes'
+  ).textContent = `Informacoes sobre o ${pokemonName}`;
 
-  pokemonInfoDiv.appendChild(pokemonImage);
+  document.querySelector('#pokemon-img').src = sprites[x];
 })();

@@ -1,26 +1,31 @@
 (() => {
-    const getTimesVisited = () => {
-      const timesVisitedJSON = localStorage.getItem('timesVisited');
-      return timesVisitedJSON ? JSON.parse(timesVisitedJSON) : {
+    /*
+      timesVisited: {
+        count: number,
+        lastVisited: Date
+      }
+    */
+  
+    let timesVisited = localStorage.getItem('timesVisited');
+  
+    if (!timesVisited) {
+      timesVisited = {
         count: 0,
         lastVisited: null,
       };
-    };
+    } else {
+      timesVisited = JSON.parse(timesVisited);
+    }
   
-    const updateTimesVisited = () => {
-      let timesVisited = getTimesVisited();
-      timesVisited.count++;
-      timesVisited.lastVisited = new Intl.DateTimeFormat('pt-BR').format(new Date());
-      localStorage.setItem('timesVisited', JSON.stringify(timesVisited));
-      return timesVisited;
-    };
+    timesVisited.count++;
+    timesVisited.lastVisited = new Intl.DateTimeFormat('pt-BR').format(
+      new Date()
+    );
   
-    const displayTimesVisited = () => {
-      const timesVisited = updateTimesVisited();
-      const timesVisitedFooter = document.getElementById('times-visited');
-      timesVisitedFooter.textContent = `Esta página foi visitada ${timesVisited.count} vezes. A última visita foi: ${timesVisited.lastVisited}`;
-    };
+    localStorage.setItem('timesVisited', JSON.stringify(timesVisited));
   
-    displayTimesVisited();
+    const timesVisitedFooter = document.getElementById('times-visited');
+  
+    timesVisitedFooter.textContent = `Esta página foi visitada ${timesVisited.count} vezes. A última visita foi: ${timesVisited.lastVisited}`;
   })();
   
