@@ -1,67 +1,61 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Todo List</title>
-  <link rel="stylesheet" href="./style.css" />
-</head>
-<body>
-  <div class="container">
-    <header>
-      <h1>Todo List</h1>
-    </header>
-    <main>
-      <dialog id="update-task-dialog">
-        <form id="update-task-form">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Todo List</title>
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <h1>Todo List</h1>
+      </header>
+      <main>
+        <dialog>
+          <form id="update-task-form">
+            <input
+              type="text"
+              name="title"
+              id="update-title"
+              placeholder="Informe o título da tarefa"
+            />
+            <textarea
+              id="update-description"
+              name="description"
+              placeholder="Informe a descrição da tarefa"
+            ></textarea>
+            <div>
+              <button type="submit" id="update-task">Editar Tarefa</button>
+              <button id="cancel-update">Cancelar</button>
+            </div>
+          </form>
+        </dialog>
+        <!-- Formulário para adicionar tarefas -->
+        <form id="taskForm" onsubmit="addTask(event)">
           <input
             type="text"
             name="title"
-            id="update-title"
-            placeholder="Informe o título da tarefa"
+            id="title"
             required
+            placeholder="Informe o título da tarefa"
           />
           <textarea
-            id="update-description"
+            id="description"
             name="description"
-            placeholder="Informe a descrição da tarefa"
             required
+            placeholder="Informe a descrição da tarefa"
           ></textarea>
-          <div>
-            <button type="submit" id="update-task">Editar Tarefa</button>
-            <button type="button" id="cancel-update">Cancelar</button>
-          </div>
+          <button type="submit" id="save-task">Salvar Tarefa</button>
         </form>
-      </dialog>
 
-      <!-- Formulário para adicionar tarefas -->
-      <form id="taskForm" onsubmit="addTask(event)">
-        <input
-          type="text"
-          name="title"
-          id="title"
-          placeholder="Informe o título da tarefa"
-          required
-        />
-        <textarea
-          id="description"
-          name="description"
-          placeholder="Informe a descrição da tarefa"
-          required
-        ></textarea>
-        <button type="submit" id="save-task">Salvar Tarefa</button>
-      </form>
+        <!-- Lista de tarefas -->
+        <ul id="taskList"></ul>
+      </main>
+      <footer>&copy; 2024 Todo List</footer>
+    </div>
 
-      <!-- Lista de tarefas -->
-      <ul id="taskList"></ul>
-    </main>
-    <footer>
-      <div id="times-visited"></div>
-      &copy; 2024 Todo List
-    </footer>
-  </div>
-
-  <script src="./index.js"></script>
-  <script src="../script.js"></script>
-</body>
+    <script src="./index.js"></script>
+    <script src="../script.js"></script>
+  </body>
 </html>
