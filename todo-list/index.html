@@ -1,37 +1,67 @@
 <!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Grid</title>
-    <link rel="stylesheet" href="style.css" />
-  </head>
-  <body>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Todo List</title>
+  <link rel="stylesheet" href="./style.css" />
+</head>
+<body>
+  <div class="container">
     <header>
       <h1>Todo List</h1>
     </header>
     <main>
-      <form id="form">
+      <dialog id="update-task-dialog">
+        <form id="update-task-form">
+          <input
+            type="text"
+            name="title"
+            id="update-title"
+            placeholder="Informe o título da tarefa"
+            required
+          />
+          <textarea
+            id="update-description"
+            name="description"
+            placeholder="Informe a descrição da tarefa"
+            required
+          ></textarea>
+          <div>
+            <button type="submit" id="update-task">Editar Tarefa</button>
+            <button type="button" id="cancel-update">Cancelar</button>
+          </div>
+        </form>
+      </dialog>
+
+      <!-- Formulário para adicionar tarefas -->
+      <form id="taskForm" onsubmit="addTask(event)">
         <input
           type="text"
-          name="task-title"
-          id="task-title"
+          name="title"
+          id="title"
           placeholder="Informe o título da tarefa"
+          required
         />
         <textarea
-          name="task-description"
-          id="task-description"
+          id="description"
+          name="description"
           placeholder="Informe a descrição da tarefa"
+          required
         ></textarea>
-        <button type="submit">Salvar Tarefa</button>
+        <button type="submit" id="save-task">Salvar Tarefa</button>
       </form>
-      <ul id="task-list"></ul>
+
+      <!-- Lista de tarefas -->
+      <ul id="taskList"></ul>
     </main>
-    <footer aria-label="Rodapé">
-      <p aria-label="Copyright">&copy; 2024 Todo List.</p>
-      <p id="times-visited"></p>
+    <footer>
+      <div id="times-visited"></div>
+      &copy; 2024 Todo List
     </footer>
-    <script src="./script.js"></script>
-    <script src="../script.js"></script>
-  </body>
+  </div>
+
+  <script src="./index.js"></script>
+  <script src="../script.js"></script>
+</body>
 </html>

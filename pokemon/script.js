@@ -2,26 +2,35 @@
   const urlParams = new URLSearchParams(window.location.search);
   const pokemonName = urlParams.get('evolution');
 
-  document.title += ` ${pokemonName.toUpperCase()}`;
+  if (pokemonName) {
+    document.title += ` ${pokemonName.toUpperCase()}`;
 
-  const response = await fetch(
-    `https://pokeapi.co/api/v2/pokemon/${pokemonName}`
-  ).then(response => response.json());
+    try {
+      const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${pokemonName}`);
+      const data = await response.json();
 
-  const sprites = Object.values(response.sprites).filter(
-    el => typeof el == 'string'
-  );
+      const sprites = Object.values(data.sprites).filter(sprite => typeof sprite === 'string');
 
-  let x = 0;
+      let currentSpriteIndex = 0;
 
-  document.getElementById('pokemon-img').addEventListener('click', () => {
-    x < sprites.length - 1 ? x++ : (x = 0);
-    document.querySelector('#pokemon-img').src = sprites[x];
-  });
+      const pokemonImgElement = document.getElementById('pokemon-img');
+      const infoElement = document.getElementById('informacoes');
 
-  document.querySelector(
-    '#informacoes'
-  ).textContent = `Informacoes sobre o ${pokemonName}`;
+      if (pokemonImgElement && infoElement) {
+        pokemonImgElement.addEventListener('click', () => {
+          currentSpriteIndex = (currentSpriteIndex + 1) % sprites.length;
+          pokemonImgElement.src = sprites[currentSpriteIndex];
+        });
 
-  document.querySelector('#pokemon-img').src = sprites[x];
+        infoElement.textContent = `Informações sobre o ${pokemonName}`;
+        pokemonImgElement.src = sprites[currentSpriteIndex];
+      } else {
+        console.error('Elementos de imagem ou informação não encontrados.');
+      }
+    } catch (error) {
+      console.error('Erro ao buscar informações do Pokémon:', error);
+    }
+  } else {
+    console.error('Nome do Pokémon não especificado nos parâmetros da URL.');
+  }
 })();
