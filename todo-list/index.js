@@ -1,108 +1,135 @@
-const taskKey = '@tasks';
-const modal = document.querySelector('main dialog');
-let currentTaskId = null;
+const taskKey = '@tasks'
+
+let selectedTaskId = null
+let id = null
 
 // Função para adicionar tarefa
 function addTask(event) {
-  event.preventDefault(); // Evita o recarregamento da página
-  const taskId = new Date().getTime();
-  const taskList = document.querySelector('#taskList');
+  event.preventDefault() // Evita o recarregamento da página
+  const taskId = new Date().getTime()
+  const taskList = document.querySelector('#taskList')
 
-  const form = document.querySelector('#taskForm');
-  const formData = new FormData(form);
+  const form = document.querySelector('#taskForm')
+  const formData = new FormData(form)
 
-  const taskTitle = formData.get('title');
-  const taskDescription = formData.get('description');
+  const taskTitle = formData.get('title')
+  const taskDescription = formData.get('description')
 
-  const li = document.createElement('li');
-  li.id = taskId;
+  const li = document.createElement('li')
+
+  li.id = `id-${taskId}`
   li.innerHTML = `
-      <div>
-        <h2>${taskTitle}</h2>
-        <button title="Editar tarefa" class="open-modal">✏️</button>
-      </div>
-      <p>${taskDescription}</p>
-  `;
+    <div class="texto">
+      <h2 id='h2-${taskId}'>${taskTitle}</h2>
+      <p id='p-${taskId}'>${taskDescription}</p>
+    </div>
+    <div class="botao">
+      <button title="Editar tarefa" onClick="openEditDialog(${taskId})">✏️</button>
+      <button title="Excluir tarefa" onClick="removeTask(event, ${taskId})">❌</button>
+    </div>
+  `
 
-  taskList.appendChild(li);
+  taskList.appendChild(li)
 
   // Salvar tarefas no localStorage
-  const tasks = JSON.parse(localStorage.getItem(taskKey)) || [];
-  tasks.push({ id: taskId, title: taskTitle, description: taskDescription });
-  localStorage.setItem(taskKey, JSON.stringify(tasks));
+  const tasks = JSON.parse(localStorage.getItem(taskKey)) || []
+  tasks.push({
+    id: taskId,
+    title: taskTitle,
+    description: taskDescription,
+  })
+  localStorage.setItem(taskKey, JSON.stringify(tasks))
 
-  form.reset();
-  attachEventListeners();
+  form.reset()
+}
+
+function openEditDialog(taskId) {
+  const tasks = JSON.parse(localStorage.getItem(taskKey)) || []
+
+  selectedTaskId = tasks.findIndex((task) => task.id === taskId)
+  const task = tasks[selectedTaskId]
+
+  const dialog = document.querySelector('dialog')
+
+  const editTitle = document.querySelector('#editTaskForm #title')
+  const editDescription = document.querySelector('#editTaskForm #description')
+
+  editTitle.value = task.title
+  editDescription.value = task.description
+
+  id = taskId
+
+  dialog.showModal()
+}
+
+function closeDialog() {
+  const dialog = document.querySelector('dialog')
+  dialog.close()
 }
 
 // Carregar tarefas do localStorage ao recarregar a página
-function loadTasks() {
-  const tasks = JSON.parse(localStorage.getItem(taskKey)) || [];
-  const taskList = document.querySelector('#taskList');
+window.addEventListener('DOMContentLoaded', () => {
+  const tasks = JSON.parse(localStorage.getItem(taskKey)) || []
+  const taskList = document.querySelector('#taskList')
+
   taskList.innerHTML = tasks
     .map(
-      task => `
-        <li id="${task.id}">
-          <div>
-            <h2>${task.title}</h2>
-            <button title="Editar tarefa" class="open-modal">✏️</button>
-          </div>
-          <p>${task.description}</p>
-        </li>`
+      (task) => `
+      <li id='id-${task.id}'>
+        <div class="texto">
+          <h2 id='h2-${task.id}'>${task.title}</h2>
+          <p id='p-${task.id}'>${task.description}</p>
+        </div>
+        <div class="botao">
+          <button title="Editar tarefa" onClick="openEditDialog(${task.id})">✏️</button>
+          <button title="Excluir tarefa" onClick="removeTask(event, ${task.id})">❌</button>
+        </div>
+      </li>
+    `
     )
-    .join('');
-  attachEventListeners();
-}
+    .join('')
+})
 
-// Função para anexar ouvintes de eventos aos botões de edição
-function attachEventListeners() {
-  document.querySelectorAll('.open-modal').forEach(button => {
-    button.addEventListener('click', event => {
-      currentTaskId = event.target.closest('li').id;
-      openEditModal(currentTaskId);
-    });
-  });
-}
+function editTask(event){
+  event.preventDefault()
+  const dialog = document.querySelector('dialog')
 
-// Função para abrir o modal de edição
-function openEditModal(taskId) {
-  const tasks = JSON.parse(localStorage.getItem(taskKey));
-  const task = tasks.find(task => task.id === parseInt(taskId));
-  if (task) {
-    document.querySelector('#update-title').value = task.title;
-    document.querySelector('#update-description').value = task.description;
-    modal.showModal();
+  const form = document.querySelector('#editTaskForm')
+  const formData = new FormData(form)
+
+  const taskTitle = formData.get('title')
+  const taskDescription = formData.get('description')
+
+  const tasks = JSON.parse(localStorage.getItem(taskKey)) || []
+  const i = tasks.findIndex((task) => task.id === id)
+  tasks[i] = {
+    id: id,
+    title: taskTitle,
+    description: taskDescription,
   }
+
+  localStorage.setItem(taskKey, JSON.stringify(tasks))
+
+  const h2 = document.querySelector(`#h2-${id}`) 
+  const p = document.querySelector(`#p-${id}`)
+
+  h2.textContent = taskTitle
+  p.textContent = taskDescription
+
+  dialog.close()
 }
 
-// Função para atualizar a tarefa
-function updateTask(event) {
-  event.preventDefault();
+function removeTask(event, taskId){
+  event.preventDefault()
+  const taskList = document.querySelector('#taskList')
 
-  const updatedTitle = document.querySelector('#update-title').value;
-  const updatedDescription = document.querySelector('#update-description').value;
+  const tasks = JSON.parse(localStorage.getItem(taskKey)) || []
+  const i = tasks.findIndex((task) => task.id === taskId)
 
-  const tasks = JSON.parse(localStorage.getItem(taskKey));
-  const taskIndex = tasks.findIndex(task => task.id === parseInt(currentTaskId));
-  if (taskIndex > -1) {
-    tasks[taskIndex].title = updatedTitle;
-    tasks[taskIndex].description = updatedDescription;
-    localStorage.setItem(taskKey, JSON.stringify(tasks));
-    loadTasks();
-    modal.close();
-  }
+  tasks.splice(i, 1)
+  localStorage.setItem(taskKey, JSON.stringify(tasks))
+
+  const li = document.querySelector(`#id-${taskId}`)
+  taskList.removeChild(li)
+
 }
-
-// Ouvintes de eventos para carregamento e inicialização
-window.addEventListener('DOMContentLoaded', loadTasks);
-
-const cancelButton = document.querySelector('#cancel-update');
-cancelButton.addEventListener('click', e => {
-  e.preventDefault();
-  modal.close();
-});
-
-const updateButton = document.querySelector('#update-task');
-updateButton.addEventListener('click', updateTask);
-
-document.querySelector('#taskForm').addEventListener('submit', addTask);
